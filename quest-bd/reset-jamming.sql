@@ -1,0 +1,48 @@
+DROP DATABASE IF EXISTS jamming;
+CREATE DATABASE jamming;
+USE jamming;
+
+SET FOREIGN_KEY_CHECKS=0;
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users(
+`id` INT PRIMARY KEY AUTO_INCREMENT,
+`username` VARCHAR(20) NOT NULL,
+`email` VARCHAR(80) UNIQUE NOT NULL,
+`hashedPassword` VARCHAR(255) NOT NULL,
+    `createdAt` DATETIME DEFAULT now(),
+    `updatedAt` DATETIME DEFAULT now()
+);
+
+DROP TABLE IF EXISTS playlists;
+CREATE TABLE playlists(
+`id` INT PRIMARY KEY AUTO_INCREMENT,
+`name` VARCHAR(80) NOT NULL,
+`user_id` INT NOT NULL,
+    `createdAt` DATETIME default now(),
+    `updatedAt` DATETIME default now(),
+CONSTRAINT fk_p_uid FOREIGN KEY(`user_id`) REFERENCES users(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS songs;
+CREATE TABLE songs(
+`id` VARCHAR(200) PRIMARY KEY,
+`name` VARCHAR(80) NOT NULL,
+`artistName` VARCHAR(80) NOT NULL,
+`albumName` VARCHAR(80) NOT NULL,
+`previewUrl` VARCHAR(255) NOT NULL,
+`artistId` VARCHAR(80) NOT NULL,
+`albumId` VARCHAR(80) NOT NULL
+);
+
+DROP TABLE IF EXISTS playlists_songs;
+CREATE TABLE playlists_songs(
+`playlist_id` INT NOT NULL,
+`song_id` VARCHAR(200) NOT NULL,
+CONSTRAINT fk_ps_pid FOREIGN KEY(`playlist_id`) REFERENCES playlists(id) ON DELETE CASCADE,
+CONSTRAINT fk_ps_sid FOREIGN KEY(`song_id`) REFERENCES songs(id) ON DELETE CASCADE
+);
+
+SET FOREIGN_KEY_CHECKS=1;
+
+SELECT * FROM users;
